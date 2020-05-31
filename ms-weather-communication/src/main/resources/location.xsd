@@ -1,0 +1,36 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://fmi.uni-sofia.bg/weather/web-service"
+           targetNamespace="http://fmi.uni-sofia.bg/weather/web-service" elementFormDefault="qualified">
+
+    <xs:element name="getLocationWeatherRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="location" type="tns:location"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getLocationWeatherResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="locationData" type="tns:locationData"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="location">
+        <xs:sequence>
+            <xs:element name="city" type="xs:string"/>
+            <xs:element name="country" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="locationData">
+        <xs:sequence>
+            <xs:element name="city" type="xs:string"/>
+            <xs:element name="country" type="xs:string"/>
+            <xs:element name="temperature" type="xs:decimal"/>
+            <xs:element name="humidity" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
