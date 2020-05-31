@@ -15,27 +15,26 @@ import org.springframework.xml.xsd.XsdSchema;
 @EnableWs
 @Configuration
 public class WebServiceConfig extends WsConfigurerAdapter {
-
 	@Bean
-	public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
-		MessageDispatcherServlet servlet = new MessageDispatcherServlet();
-		servlet.setApplicationContext(applicationContext);
-		servlet.setTransformWsdlLocations(true);
-		return new ServletRegistrationBean(servlet, "/ws/*");
+	public ServletRegistrationBean messageDispatcherServlet(ApplicationContext context) {
+		MessageDispatcherServlet messageDispatcherServlet = new MessageDispatcherServlet();
+		messageDispatcherServlet.setApplicationContext(context);
+		messageDispatcherServlet.setTransformWsdlLocations(true);
+		return new ServletRegistrationBean(messageDispatcherServlet, "/ws/*");
 	}
 
 	@Bean(name = "location")
-	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema countriesSchema) {
-		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-		wsdl11Definition.setPortTypeName("LocationPort");
-		wsdl11Definition.setLocationUri("/ws");
-		wsdl11Definition.setTargetNamespace("http://fmi.uni-sofia.bg/weather/web-service");
-		wsdl11Definition.setSchema(countriesSchema);
-		return wsdl11Definition;
+	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema locationSchema) {
+		DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
+		definition.setPortTypeName("LocationPort");
+		definition.setTargetNamespace("http://fmi.uni-sofia.bg/weather/web-service");
+		definition.setLocationUri("/ws");
+		definition.setSchema(locationSchema);
+		return definition;
 	}
-
+	
 	@Bean
-	public XsdSchema countriesSchema() {
+	public XsdSchema locationSchema() {
 		return new SimpleXsdSchema(new ClassPathResource("location.xsd"));
 	}
 }

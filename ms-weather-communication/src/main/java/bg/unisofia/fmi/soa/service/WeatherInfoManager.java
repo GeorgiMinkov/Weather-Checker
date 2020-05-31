@@ -2,14 +2,18 @@ package bg.unisofia.fmi.soa.service;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -39,14 +43,15 @@ public class WeatherInfoManager {
 		this.restTemplate = restTemplate;
 	}
 
-	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCountryRequest")
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getLocationWeatherRequest")
 	@ResponsePayload
-	public GetLocationWeatherResponse getCountry(@RequestPayload GetLocationWeatherRequest request) {
+	public GetLocationWeatherResponse getLocationWeather(@RequestPayload GetLocationWeatherRequest request) {
+		log.info(">>>>>>>>>> getLocationWeather " + request);
 		// send data to open weather;
 		GetLocationWeatherResponse weatherResponse = new GetLocationWeatherResponse();
 		
-		if (request != null && request.getLocation() != null && StringUtils.isEmpty(request.getLocation().getCity())
-				&& StringUtils.isEmpty(request.getLocation().getCountry())) {
+		if (request != null && request.getLocation() != null && !StringUtils.isEmpty(request.getLocation().getCity())
+				&& !StringUtils.isEmpty(request.getLocation().getCountry())) {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -58,7 +63,7 @@ public class WeatherInfoManager {
 
 			System.out.println(url);
 			String response = restTemplate
-					.exchange(appConfig.getOpenWeatherApiUrl(), HttpMethod.POST, entity, String.class).getBody();
+					.exchange(url, HttpMethod.GET, entity, String.class).getBody();
 
 			JSONObject json = new JSONObject(response);
 			JSONObject weather = new JSONObject(json.getJSONArray("weather").get(0).toString());

@@ -1,48 +1,36 @@
 package bg.unisofia.fmi.soa.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
+import lombok.Data;
+
+@ConfigurationProperties(prefix = "config")
 @Configuration
 public class AppConfig {
-	// For property coverage
-	private final Environment env;
 	
-	@Autowired
-	public AppConfig(Environment env) {
-		this.env = env;
+	private final Db db = new Db();
+	
+	private final Jooq jooq = new Jooq();
+	
+	public Db getDb() {
+		return db;
 	}
 	
-	public Integer getBackoffKafkaConsumerInitialInterval() {
-		return Integer.parseInt(env.getProperty("retry.backoff.kafka.consumer.initialInterval"));
+	public Jooq getJooq() {
+		return jooq;
 	}
 	
-	public Integer getBackoffKafkaConsumerMultiplier() {
-		return Integer.parseInt(env.getProperty("retry.backoff.kafka.consumer.multiplier"));
+	@ConfigurationProperties(prefix = "db")
+	@Data
+	public class Db {
+		private String schema;
+		private String schemaDefault;
 	}
 	
-	public Integer getBackoffKafkaConsumerMaxInterval() {
-		return Integer.parseInt(env.getProperty("retry.backoff.kafka.consumer.maxInterval"));
-	}
-	
-	public String getDefaultDatabaseSchema() {
-		return env.getProperty("application.db.schema.default");
-	}
-	
-	public String getEnvDatabaseSchema() {
-		return env.getProperty("application.db.schema");
-	}
-	
-	public String getJooqSqlDialect() {
-		return env.getProperty("spring.jooq.sql-dialect");
-	}
-	
-	public Integer getHttpConnectionTimeout() {
-		return Integer.parseInt(env.getProperty("http.connection.timeout"));
-	}
-	
-	public Integer getHttpConnectionSoTimeout() {
-		return Integer.parseInt(env.getProperty("http.connection.so.timeout"));
+	@ConfigurationProperties(prefix = "jooq")
+	@Data
+	public class Jooq {
+		private String sqlDialect;
 	}
 }

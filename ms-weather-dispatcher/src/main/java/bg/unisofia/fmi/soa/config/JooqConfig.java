@@ -53,12 +53,12 @@ public class JooqConfig {
 		DefaultConfiguration jooqConfig = new DefaultConfiguration();
 		jooqConfig.set(connectionProvider());
 		jooqConfig.set(new DefaultExecuteListenerProvider(exceptionTransformer()));
-		jooqConfig.set(SQLDialect.valueOf(appConfig.getJooqSqlDialect()));
-		 
-		Settings settings = new Settings(); 
+		jooqConfig.set(SQLDialect.valueOf(appConfig.getJooq().getSqlDialect()));
+		
+		Settings settings = new Settings();
 		settings.withRenderMapping(new RenderMapping().withSchemata(
-				new MappedSchema().withInput(appConfig.getDefaultDatabaseSchema())
-								  .withOutput(appConfig.getEnvDatabaseSchema())));
+				new MappedSchema().withInput(appConfig.getDb().getSchemaDefault())
+				  .withOutput(appConfig.getDb().getSchema())));
 		
 		jooqConfig.setSettings(settings);
 		

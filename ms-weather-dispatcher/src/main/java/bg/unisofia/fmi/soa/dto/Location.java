@@ -1,13 +1,13 @@
 package bg.unisofia.fmi.soa.dto;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
 @Data
-//@JsonDeserialize
-//@JsonSerialize
 @JsonIgnoreProperties
 public class Location {
 
@@ -16,4 +16,13 @@ public class Location {
 	
 	@JsonProperty(value = "country")
 	private String country;
+	
+	@JsonProperty(value = "temperature")
+	private BigDecimal temperature;
+	
+	@JsonProperty(value = "humidity")
+	private String humidity;
+	
+	@JsonProperty(value = "description")
+	private String description;
 }
